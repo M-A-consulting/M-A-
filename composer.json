@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "darkaonline/l5-swagger": "^8.6",
+        "dedoc/scramble": "^0.11.33",
         "filament/filament": "^3.2",
         "knuckleswtf/scribe": "^4.39",
         "laravel/framework": "^11.31",

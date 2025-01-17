@@ -3,50 +3,87 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\Blog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CommentController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/comments",
+     *     tags={"comments"},
+     *     summary="Get list of comments",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation"
+     *     )
+     * )
      */
     public function index()
     {
-        $comments = Comment::with(['blog', 'user'])->get();
-
-        return response()->json($comments);
+        return response()->json(Comment::all());
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/comments",
+     *     tags={"comments"},
+     *     summary="Create a comment",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="content", type="string"),
+     *             @OA\Property(property="user_id", type="integer"),
+     *             @OA\Property(property="blog_id", type="integer")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Comment created successfully"
+     *     )
+     * )
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'blog_id' => ['required','exists:blogs,id'],
-            'user_id' => ['required','exists:users,id'],
-            'content' => ['required','string'],
+        $validator = Validator::make($request->all(), [
+            'content' => 'required|string',
+            'user_id' => 'required|exists:users,id',
+            'blog_id' => 'required|exists:blogs,id',
         ]);
 
-        $comment = Comment::create($validated);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $comment = Comment::create($request->only(['content', 'user_id', 'blog_id']));
 
         return response()->json(['message' => 'Comment created successfully', 'comment' => $comment], 201);
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/comments/{id}",
+     *     tags={"comments"},
+     *     summary="Get a specific comment",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of the comment",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *     ),
+     *     @OA\Response(response=404, description="Comment not found")
+     * )
      */
     public function show($id)
     {
-        $comment = Comment::with(['blog', 'user'])->find($id);
+        $comment = Comment::find($id);
 
         if (!$comment) {
             return response()->json(['message' => 'Comment not found'], 404);
@@ -56,15 +93,30 @@ class CommentController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Comment $comment)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *     path="/api/comments/{id}",
+     *     tags={"comments"},
+     *     summary="Update a specific comment",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of the comment",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="content", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Comment updated successfully",
+     *     ),
+     *     @OA\Response(response=404, description="Comment not found")
+     * )
      */
     public function update(Request $request, $id)
     {
@@ -74,17 +126,37 @@ class CommentController extends Controller
             return response()->json(['message' => 'Comment not found'], 404);
         }
 
-        $validated = $request->validate([
-            'content' => ['sometimes','string'],
+        $validator = Validator::make($request->all(), [
+            'content' => 'sometimes|string',
         ]);
 
-        $comment->update($validated);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $comment->update($request->only(['content']));
 
         return response()->json(['message' => 'Comment updated successfully', 'comment' => $comment]);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/comments/{id}",
+     *     tags={"comments"},
+     *     summary="Delete a specific comment",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of the comment",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Comment deleted successfully"
+     *     ),
+     *     @OA\Response(response=404, description="Comment not found")
+     * )
      */
     public function destroy($id)
     {

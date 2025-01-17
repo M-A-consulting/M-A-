@@ -2,13 +2,22 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\Project;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/projects",
+     *     tags={"projects"},
+     *     summary="Get list of projects",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation"
+     *     )
+     * )
      */
     public function index()
     {
@@ -25,7 +34,32 @@ class ProjectController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/projects",
+     *     tags={"projects"},
+     *     summary="Create a new project",
+     *     description="Create a new project with the provided data",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"title", "subtitle", "launch_date", "company_name", "content"},
+     *             @OA\Property(property="title", type="string"),
+     *             @OA\Property(property="subtitle", type="string"),
+     *             @OA\Property(property="launch_date", type="string", format="date"),
+     *             @OA\Property(property="company_name", type="string"),
+     *             @OA\Property(property="video", type="string", format="uri"),
+     *             @OA\Property(property="content", type="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Project created successfully",
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid input data"
+     *     )
+     * )
      */
     public function store(Request $request)
     {
@@ -44,7 +78,27 @@ class ProjectController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/projects/{id}",
+     *     tags={"projects"},
+     *     summary="Get a project by ID",
+     *     description="Fetch a single project by its ID",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of the project to retrieve",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Project not found"
+     *     )
+     * )
      */
     public function show($id)
     {
@@ -61,7 +115,39 @@ class ProjectController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *     path="/api/projects/{id}",
+     *     tags={"projects"},
+     *     summary="Update an existing project",
+     *     description="Update a project with the provided data",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of the project to update",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"title", "subtitle", "launch_date", "company_name", "content"},
+     *             @OA\Property(property="title", type="string"),
+     *             @OA\Property(property="subtitle", type="string"),
+     *             @OA\Property(property="launch_date", type="string", format="date"),
+     *             @OA\Property(property="company_name", type="string"),
+     *             @OA\Property(property="video", type="string", format="uri"),
+     *             @OA\Property(property="content", type="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Project updated successfully",
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Project not found"
+     *     )
+     * )
      */
     public function update(Request $request, $id)
     {
@@ -72,7 +158,27 @@ class ProjectController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/projects/{id}",
+     *     tags={"projects"},
+     *     summary="Delete a project",
+     *     description="Delete a project by its ID",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of the project to delete",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Project deleted successfully"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Project not found"
+     *     )
+     * )
      */
     public function destroy($id)
     {

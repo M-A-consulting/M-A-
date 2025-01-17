@@ -9,7 +9,15 @@ use Illuminate\Support\Facades\Validator;
 class BlogController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/blogs",
+     *     tags={"blogs"},
+     *     summary="Get list of blogs",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation"
+     *     )
+     * )
      */
     public function index()
     {
@@ -17,15 +25,25 @@ class BlogController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    // public function create()
-    // {
-    //     //
-    // }
-
-    /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/blogs",
+     *     tags={"blogs"},
+     *     summary="Create a blog",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="title", type="string"),
+     *             @OA\Property(property="content", type="string"),
+     *             @OA\Property(property="user_id", type="integer"),
+     *             @OA\Property(property="image", type="string", nullable=true)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Created successfully"
+     *     )
+     * )
      */
     public function store(Request $request)
     {
@@ -46,7 +64,23 @@ class BlogController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/blogs/{id}",
+     *     tags={"blogs"},
+     *     summary="Get a specific blog",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of the blog",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *     ),
+     *     @OA\Response(response=404, description="Blog not found")
+     * )
      */
     public function show($id)
     {
@@ -60,15 +94,32 @@ class BlogController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Blog $blog)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *     path="/api/blogs/{id}",
+     *     tags={"blogs"},
+     *     summary="Update a specific blog",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of the blog",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="title", type="string"),
+     *             @OA\Property(property="content", type="string"),
+     *             @OA\Property(property="image", type="string", nullable=true)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Blog updated successfully",
+     *     ),
+     *     @OA\Response(response=404, description="Blog not found")
+     * )
      */
     public function update(Request $request, $id)
     {
@@ -95,7 +146,23 @@ class BlogController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/blogs/{id}",
+     *     tags={"blogs"},
+     *     summary="Delete a specific blog",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of the blog",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Blog deleted successfully"
+     *     ),
+     *     @OA\Response(response=404, description="Blog not found")
+     * )
      */
     public function destroy($id)
     {
