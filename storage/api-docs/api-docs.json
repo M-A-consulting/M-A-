@@ -870,6 +870,148 @@
                     }
                 }
             }
+        },
+        "/api/settings": {
+            "get": {
+                "tags": [
+                    "settings"
+                ],
+                "summary": "Get list of settings",
+                "operationId": "4d0065c1ce276add4119aa348280c428",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "settings"
+                ],
+                "summary": "Create a setting",
+                "operationId": "ac81ea47e218197af695ece98dbe306a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "key": {
+                                        "type": "string"
+                                    },
+                                    "value": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created successfully"
+                    }
+                }
+            }
+        },
+        "/api/settings/{id}": {
+            "get": {
+                "tags": [
+                    "settings"
+                ],
+                "summary": "Get a specific setting",
+                "operationId": "84fcbd0ff4fbd11225c6f8ccabd2e9c8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the setting",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Setting not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "settings"
+                ],
+                "summary": "Update a specific setting",
+                "operationId": "862148277dcd1fc894da922852ef1033",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the setting",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "key": {
+                                        "type": "string"
+                                    },
+                                    "value": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Setting updated successfully"
+                    },
+                    "404": {
+                        "description": "Setting not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "settings"
+                ],
+                "summary": "Delete a specific setting",
+                "operationId": "c8972a5e50b0d8e53473a7961ebd8de6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the setting",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Setting deleted successfully"
+                    },
+                    "404": {
+                        "description": "Setting not found"
+                    }
+                }
+            }
         }
     },
     "tags": [
@@ -892,6 +1034,10 @@
         {
             "name": "projects",
             "description": "projects"
+        },
+        {
+            "name": "settings",
+            "description": "settings"
         }
     ]
 }

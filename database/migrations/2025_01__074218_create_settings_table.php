@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('settings', function (Blueprint $table) {
             $table->uuid('id')->primary()->default(DB::raw('UUID()'));;
             $table->string('company_name');
-            $table->string('logo')->nullable();
+            $table->string('logo');
             $table->text('about')->nullable();
             $table->date('founded_date')->nullable();
             $table->string('email')->nullable();

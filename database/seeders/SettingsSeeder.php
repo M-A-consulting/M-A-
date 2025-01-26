@@ -18,7 +18,7 @@ class SettingsSeeder extends Seeder
             'logo' => 'logo.jpg',
             'about' => 'About the company.',
             'founded_date' => now(),
-            'email' => 'M&Aample.com',
+            'email' => 'M&A@example.com',
             'phone' => '01064209849',
             'address' => 'Alexandria, Egypt',
             'social_links' => json_encode(['facebook' => 'https://facebook.com', 'twitter' => 'https://twitter.com']),

@@ -68,7 +68,7 @@ class SettingsController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $setting = Settings::create($request->only(['key', 'value']));
+        $setting = Settings::create($request->all());
 
         return response()->json(['message' => 'Setting created successfully', 'setting' => $setting], 201);
     }
@@ -186,7 +186,7 @@ class SettingsController extends Controller
      */
     public function destroy($id)
     {
-        $setting = Settings::find($id);
+        $setting = Settings::findOrFail($id);
 
         if (!$setting) {
             return response()->json(['message' => 'Setting not found'], 404);
